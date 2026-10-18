@@ -12,8 +12,9 @@ leads.csv ────► LeadParser ────► Business… ────┘
 
 ## What the report contains
 
-The report is right-to-left Hebrew on landscape A4 pages, with a 9pt table font. The businesses follow each other,
-in the order they first appear in the leads sheet:
+The report is right-to-left Hebrew on landscape A4 pages, with a 9pt table font. Each business starts on a new
+page (the first one right under the title), in the order they first appear in the leads sheet, so each business's
+pages can be printed or sent on their own:
 
 | Section | Content |
 |---|---|

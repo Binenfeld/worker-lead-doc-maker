@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * <pre>
  *   Title:      שיבוץ עובדים לעסקים
  *   Paragraph:  date, number of businesses, workers asked for, workers we can supply
- *   For each business, in the leads sheet's order:
+ *   For each business, in the leads sheet's order, each starting a new page (the first one under the title):
  *     Heading 1:  business name
  *     Paragraph:  its filled-in details (ח.פ., תחום, איש קשר, טלפון…)
  *     Paragraph:  per profession: "wanted profession - canSupply/wanted", e.g. "3 צבע - 2/3"
@@ -48,8 +48,8 @@ public final class ReportFactory {
                 .addParagraph("נכון לתאריך " + today + "  |  עסקים: " + businesses.size()
                         + "  |  עובדים מבוקשים: " + wanted + "  |  ניתן לספק: " + canSupply);
 
-        for (Business business : businesses) {
-            addBusinessSection(doc, workers, business);
+        for (int i = 0; i < businesses.size(); i++) {
+            addBusinessSection(doc, workers, businesses.get(i), i > 0);
         }
 
         doc.save(path);
@@ -61,8 +61,13 @@ public final class ReportFactory {
         return wanted + " " + profession + " - " + available + "/" + wanted;
     }
 
-    private static void addBusinessSection(DocxWriter doc, WorkerSheet workers, Business business) {
-        doc.addHeading(1, business.name());
+    // newPage: start the business on a new page, so each business can be printed or sent on its own.
+    private static void addBusinessSection(DocxWriter doc, WorkerSheet workers, Business business, boolean newPage) {
+        if (newPage) {
+            doc.addHeadingOnNewPage(1, business.name());
+        } else {
+            doc.addHeading(1, business.name());
+        }
         if (!business.details().isEmpty()) {
             doc.addParagraph(business.details().entrySet().stream()
                     .map(detail -> detail.getKey() + ": " + detail.getValue())
